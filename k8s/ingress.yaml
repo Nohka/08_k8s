@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mlops-ingress
+  namespace: mlops
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: taxi.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: taxi-app-service
+                port:
+                  number: 8000
+    - host: mlflow.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mlflow-service
+                port:
+                  number: 5001

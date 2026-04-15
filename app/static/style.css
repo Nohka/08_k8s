@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    gap: 40px;
+}
+
+.form-box {
+    flex: 1;
+}
+
+.result-box {
+    flex: 1;
+    border: 2px solid #ff4d00;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.result-value {
+    font-size: 48px;
+    color: #ff4d00;
+    margin-top: 20px;
+}
+
+form {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+input,
+select,
+button {
+    padding: 8px;
+    font-size: 14px;
+    background: white;
+}
+
+button {
+    cursor: pointer;
+}

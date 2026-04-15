@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+    <title>NYC Green Taxi Fare Predictor</title>
+</head>
+
+<body>
+    <h1>NYC Green Taxi Fare Predictor</h1>
+
+    <div class="container">
+
+        <div class="form-box">
+            <form id="predict-form">
+                <label for="trip_distance">Trip distance (miles)</label>
+                <input type="number" step="any" id="trip_distance" name="trip_distance" value="3.5" required>
+
+                <label for="trip_duration_min">Trip duration (minutes)</label>
+                <input type="number" step="any" id="trip_duration_min" name="trip_duration_min" value="14.0" required>
+
+                <label for="passenger_count">Passenger count</label>
+                <input type="number" step="any" id="passenger_count" name="passenger_count" value="1" required>
+
+                <label for="RatecodeID">Rate type</label>
+                <select id="RatecodeID" name="RatecodeID">
+                    <option value="1">Standard rate</option>
+                    <option value="2">JFK airport</option>
+                    <option value="3">Newark airport</option>
+                    <option value="4">Nassau/Westchester</option>
+                    <option value="5">Negotiated fare</option>
+                    <option value="6">Group ride</option>
+                </select>
+
+                <label for="pickup_hour">Pickup hour</label>
+                <select id="pickup_hour" name="pickup_hour" required>
+                    <option value="0">00:00</option>
+                    <option value="1">01:00</option>
+                    <option value="2">02:00</option>
+                    <option value="3">03:00</option>
+                    <option value="4">04:00</option>
+                    <option value="5">05:00</option>
+                    <option value="6">06:00</option>
+                    <option value="7">07:00</option>
+                    <option value="8">08:00</option>
+                    <option value="9">09:00</option>
+                    <option value="10">10:00</option>
+                    <option value="11">11:00</option>
+                    <option value="12">12:00</option>
+                    <option value="13">13:00</option>
+                    <option value="14">14:00</option>
+                    <option value="15">15:00</option>
+                    <option value="16">16:00</option>
+                    <option value="17">17:00</option>
+                    <option value="18">18:00</option>
+                    <option value="19">19:00</option>
+                    <option value="20">20:00</option>
+                    <option value="21">21:00</option>
+                    <option value="22">22:00</option>
+                    <option value="23">23:00</option>
+                </select>
+
+                <button type="submit">Predict fare</button>
+            </form>
+        </div>
+
+        <div class="result-box">
+            <h2>Fare</h2>
+            <div id="result" class="result-value">--</div>
+        </div>
+
+    </div>
+
+    <p><strong>Model loaded:</strong> {{ model_loaded }}</p>
+    <p><strong>Model URI:</strong> <code>{{ model_uri }}</code></p>
+
+    {% if model_error %}
+    <p><strong>Model error:</strong> {{ model_error }}</p>
+    {% endif %}
+
+    <script>
+        const form = document.getElementById("predict-form");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            const data = {
+                trip_distance: parseFloat(formData.get("trip_distance")),
+                trip_duration_min: parseFloat(formData.get("trip_duration_min")),
+                passenger_count: parseFloat(formData.get("passenger_count")),
+                RatecodeID: parseFloat(formData.get("RatecodeID")),
+                pickup_hour: parseFloat(formData.get("pickup_hour")),
+            };
+
+            const response = await fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            document.getElementById("result").innerText =
+                "$" + result.prediction.toFixed(2);
+        });
+    </script>
+</body>
+
+</html>

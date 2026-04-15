@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taxi-app
+  namespace: mlops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taxi-app
+  template:
+    metadata:
+      labels:
+        app: taxi-app
+    spec:
+      containers:
+        - name: taxi-app
+          image: taxi-app:v3
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: MLFLOW_TRACKING_URI
+              value: "http://mlflow-service:5001"
+            - name: MLFLOW_EXPERIMENT_NAME
+              value: "nyc-green-taxi-regression-v2"
+            # optional: override or let fallback logic pick best run
+            # - name: MODEL_URI
+            #   value: "runs:/<run_id>/model"
+          volumeMounts:
+            - name: mlflow-data
+              mountPath: /mlflow
+      volumes:
+        - name: mlflow-data
+          persistentVolumeClaim:
+            claimName: mlflow-pvc

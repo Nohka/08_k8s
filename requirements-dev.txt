@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pandas
+numpy
+scikit-learn
+mlflow
+joblib
+pydantic
+python-multipart
+jinja2
+python-dotenv
+pyarrow # only one additional needed for training, but not for the app

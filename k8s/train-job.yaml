@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: taxi-train
+  namespace: mlops
+spec:
+  template:
+    metadata:
+      labels:
+        app: taxi-train
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: taxi-train
+          image: taxi-train:v3
+          imagePullPolicy: Never
+          env:
+            - name: MLFLOW_TRACKING_URI
+              value: "http://mlflow-service:5001"
+          command: ["python", "-m", "src.train"]
+          args:
+            - "--tracking-uri"
+            - "http://mlflow-service:5001"
+            - "--experiment-name"
+            - "nyc-green-taxi-regression-v2"
+            - "--data-files"
+            - "data/green_tripdata_2021-01.parquet" # only 1 file to be used because of OOM
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
