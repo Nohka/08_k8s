@@ -30,9 +30,9 @@ spec:
             - --port
             - "5001"
             - --allowed-hosts
-            - "mlflow-service:5001,localhost:5001,127.0.0.1:5001"
+            - "mlflow-service:5001,localhost:5001,localhost:*,127.0.0.1:5001,127.0.0.1:*,mlflow.local,mlflow.local:*"
             - --cors-allowed-origins
-            - "http://localhost:5001,http://127.0.0.1:5001"
+            - "http://localhost:5001,http://127.0.0.1:5001,http://mlflow.local"
           ports:
             - containerPort: 5001
           volumeMounts:
